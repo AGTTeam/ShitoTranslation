@@ -1,0 +1,7 @@
+__pycache__
+
+build
+ShitoData
+*.log
+*.exe
+notes.md
