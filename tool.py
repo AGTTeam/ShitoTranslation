@@ -2,7 +2,7 @@ import os
 import click
 from hacktools import common, ws
 
-version = "0.5.1"
+version = "0.6.0"
 data = "ShitoData/"
 romfile = data + "shito.ws"
 rompatch = data + "shito_patched.ws"
@@ -16,8 +16,9 @@ replacefolder = data + "replace/"
 @click.option("--rom", is_flag=True, default=False)
 @click.option("--font", is_flag=True, default=False)
 @click.option("--script", is_flag=True, default=False)
-def extract(rom, font, script):
-    all = not rom and not font and not script
+@click.option("--img", is_flag=True, default=False)
+def extract(rom, font, script, img):
+    all = not rom and not font and not script and not img
     if all or rom:
         ws.extractRom(romfile, infolder, outfolder)
     if all or font:
@@ -31,6 +32,9 @@ def extract(rom, font, script):
                         f.write("0")
                     f.write(format(row, "x") + columns[column] + "=\n")
                 f.write("\n")
+    if all or img:
+        import extract_img
+        extract_img.run(data)
     if all or script:
         import extract_script
         extract_script.run(data)

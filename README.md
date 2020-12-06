@@ -21,7 +21,16 @@ New textboxes can be added by appending `>>` followed by the new text.
 Control codes are specified as `<XXXX>`, they should usually be kept.  
 Comments can be added at the end of lines by using `#`  
 ## Image Editing
+### Using images.txt
+Create or edit the `images.txt` file in the ShitoData folder using this format:
+```
+!FILE:bank_18.bin
+bank_18_01=a50,1200,8
+```
+The parameters are the offset of the tile data, the offset of the map data, and the number of contiguous images in the map data using the same tiles.
+### Manual
 Copy the bank you want to edit from the "extract" folder to the "replace" folder (create it if it doesn't exist)  and edit it directly.  
+### Bank list
 These are the banks that contain images with Japanese text:  
 * bank_07: Cutscenes
 * bank_08: Cutscenes

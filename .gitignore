@@ -4,4 +4,5 @@ build
 ShitoData
 *.log
 *.exe
+*.ttf
 notes.md
