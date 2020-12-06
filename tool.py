@@ -2,7 +2,7 @@ import os
 import click
 from hacktools import common, ws
 
-version = "0.5.0"
+version = "0.5.1"
 data = "ShitoData/"
 romfile = data + "shito.ws"
 rompatch = data + "shito_patched.ws"
@@ -40,8 +40,9 @@ def extract(rom, font, script):
 @click.option("--font", is_flag=True, default=False)
 @click.option("--script", is_flag=True, default=False)
 @click.option("--debug", is_flag=True, default=False)
+@click.option("--angel", is_flag=True, default=False)
 @click.option("--no-rom", is_flag=True, default=False)
-def repack(font, script, debug, no_rom):
+def repack(font, script, debug, angel, no_rom):
     all = not font and not script
     if all or font:
         import repack_font
@@ -49,11 +50,14 @@ def repack(font, script, debug, no_rom):
     if all or script:
         import repack_script
         repack_script.run(data)
-    if debug:
+    if debug or angel:
         # https://tcrf.net/Neon_Genesis_Evangelion:_Shito_Ikusei
         with common.Stream(outfolder + "bank_14.bin", "rb+") as f:
-            f.seek(0x97)
-            f.writeUInt(0x4000cc6e)
+            if debug:
+                f.seek(0x97)
+                f.writeUInt(0x4000cc6e)
+            f.seek(0xa6b9)
+            f.writeByte(0x0e if not angel else 0x0d)
     if not no_rom:
         if os.path.isdir(replacefolder):
             common.mergeFolder(replacefolder, outfolder)

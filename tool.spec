@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['tool.py'],
-             pathex=['d:\\roms\\shito'],
+             pathex=['D:\\roms\\shito'],
              binaries=[('xdelta.exe', '.')],
              datas=[],
              hiddenimports=['pkg_resources.py2_warn'],
