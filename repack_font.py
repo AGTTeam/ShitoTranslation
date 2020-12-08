@@ -97,10 +97,10 @@ def run(data):
                 for j2 in range(15):
                     pixels[fontx + i2, fonty + j2] = fontpixels[positions[item[0]] + i2, j2]
             for j2 in range(15):
-                pixels[fontx + 7, fonty + j2] = fontpixels[positions[" "], j2]
+                pixels[fontx + chars[item[0]], fonty + j2] = fontpixels[positions[" "], j2]
             for i2 in range(7):
                 for j2 in range(15):
-                    pixels[fontx + i2 + 8, fonty + j2] = fontpixels[positions[item[1]] + i2, j2]
+                    pixels[fontx + i2 + chars[item[0]] + 1, fonty + j2] = fontpixels[positions[item[1]] + i2, j2]
             fontwidths.append(chars[item[0]] + chars[item[1]] + 2)
         fontx += 16
         if fontx == 16 * 4:
