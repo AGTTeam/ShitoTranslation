@@ -1,8 +1,9 @@
+import codecs
 import os
 import click
 from hacktools import common, ws
 
-version = "0.6.0"
+version = "0.6.1"
 data = "ShitoData/"
 romfile = data + "shito.ws"
 rompatch = data + "shito_patched.ws"
@@ -16,9 +17,10 @@ replacefolder = data + "replace/"
 @click.option("--rom", is_flag=True, default=False)
 @click.option("--font", is_flag=True, default=False)
 @click.option("--script", is_flag=True, default=False)
+@click.option("--credits", is_flag=True, default=False)
 @click.option("--img", is_flag=True, default=False)
-def extract(rom, font, script, img):
-    all = not rom and not font and not script and not img
+def extract(rom, font, script, credits, img):
+    all = not rom and not font and not script and not credits and not img
     if all or rom:
         ws.extractRom(romfile, infolder, outfolder)
     if all or font:
@@ -32,12 +34,15 @@ def extract(rom, font, script, img):
                         f.write("0")
                     f.write(format(row, "x") + columns[column] + "=\n")
                 f.write("\n")
-    if all or img:
-        import extract_img
-        extract_img.run(data)
     if all or script:
         import extract_script
         extract_script.run(data)
+    if all or credits:
+        import extract_credits
+        extract_credits.run(data)
+    if all or img:
+        import extract_img
+        extract_img.run(data)
 
 
 @common.cli.command()
@@ -66,6 +71,20 @@ def repack(font, script, debug, angel, no_rom):
         if os.path.isdir(replacefolder):
             common.mergeFolder(replacefolder, outfolder)
         ws.repackRom(romfile, rompatch, outfolder, patchfile)
+
+
+@common.cli.command()
+@click.argument("text")
+def translate(text):
+    with codecs.open(data + "table_input.txt", "r", "utf-8") as tablef:
+        table = common.getSection(tablef, "")
+    invtable = {}
+    for c in table.keys():
+        invtable[table[c][0]] = c
+    ret = ""
+    for c in text:
+        ret += invtable[c][-2:] + invtable[c][:2]
+    common.logMessage(ret)
 
 
 if __name__ == "__main__":
