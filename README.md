@@ -25,9 +25,14 @@ Comments can be added at the end of lines by using `#`
 Create or edit the `images.txt` file in the ShitoData folder using this format:
 ```
 !FILE:bank_18.bin
-bank_18_01=a50,1200,8
+bank_18_01=a50,1200,8,1,1
 ```
-The parameters are the offset of the tile data, the offset of the map data, and the number of contiguous images in the map data using the same tiles.
+The parameters are:
+* Offset of the tile data
+* Offset of the map data
+* Number of contiguous images in the map data using the same tiles
+* Set to 1 to read the palette for image export
+* Set to 1 to write new palette data, instead of using the original ones
 ### Manual
 Copy the bank you want to edit from the "extract" folder to the "replace" folder (create it if it doesn't exist)  and edit it directly.  
 ### Bank list

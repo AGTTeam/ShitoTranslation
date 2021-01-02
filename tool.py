@@ -3,7 +3,7 @@ import os
 import click
 from hacktools import common, ws
 
-version = "0.6.1"
+version = "0.7.0"
 data = "ShitoData/"
 romfile = data + "shito.ws"
 rompatch = data + "shito_patched.ws"
@@ -48,17 +48,21 @@ def extract(rom, font, script, credits, img):
 @common.cli.command()
 @click.option("--font", is_flag=True, default=False)
 @click.option("--script", is_flag=True, default=False)
+@click.option("--img", is_flag=True, default=False)
 @click.option("--debug", is_flag=True, default=False)
 @click.option("--angel", is_flag=True, default=False)
 @click.option("--no-rom", is_flag=True, default=False)
-def repack(font, script, debug, angel, no_rom):
-    all = not font and not script
+def repack(font, script, img, debug, angel, no_rom):
+    all = not font and not script and not img
     if all or font:
         import repack_font
         repack_font.run(data)
     if all or script:
         import repack_script
         repack_script.run(data)
+    if all or img:
+        import repack_img
+        repack_img.run(data)
     if debug or angel:
         # https://tcrf.net/Neon_Genesis_Evangelion:_Shito_Ikusei
         with common.Stream(outfolder + "bank_14.bin", "rb+") as f:

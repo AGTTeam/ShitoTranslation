@@ -20,13 +20,14 @@ def run(data):
                     imgdata = section[imgname][0].split(",")
                     mapstart = int(imgdata[1], 16)
                     imgnum = int(imgdata[2]) if len(imgdata) >= 3 else 1
+                    readpal = len(imgdata) >= 4 and imgdata[3] == "1"
                     extracted += imgnum
                     if "-" in imgdata[0]:
                         tilestart = int(imgdata[0].split("-")[0], 16)
                         tileend = int(imgdata[0].split("-")[1], 16)
-                        for i in common.showProgress(range(tilestart, tileend + 1, 2)):
-                            ws.extractMappedImage(f, outfolder + imgname + "_" + hex(i) + ".png", i, mapstart, imgnum)
+                        for i in common.showProgress(range(tilestart, tileend + 1, 1)):
+                            ws.extractMappedImage(f, outfolder + imgname + "_" + hex(i) + ".png", i, mapstart, imgnum, readpal)
                     else:
                         tilestart = int(imgdata[0], 16)
-                        ws.extractMappedImage(f, outfolder + imgname + ".png", tilestart, mapstart, imgnum)
+                        ws.extractMappedImage(f, outfolder + imgname + ".png", tilestart, mapstart, imgnum, readpal)
     common.logMessage("Done! Extracted", extracted, "files")
