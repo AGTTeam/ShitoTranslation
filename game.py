@@ -2,7 +2,26 @@ import codecs
 from hacktools import common
 
 # The value in pixels that we can fit before wordwrapping
-wordwrap = 208
+wordwrap = 206
+# Speaker codes
+speakercodes = {
+    0x00: 'Shigeru',
+    0x02: 'Asuka',
+    0x04: 'Fuyutsuki',
+    0x06: 'Gendo',
+    0x08: 'Makoto',
+    0x0a: 'Hikari',
+    0x0c: 'Kaji',
+    0x0e: 'Kensuke',
+    0x10: 'Maya',
+    0x12: 'Misato',
+    0x14: 'PenPen',
+    0x16: 'Rei',
+    0x18: 'Ritsuko',
+    0x1a: 'Shinji',
+    0x1c: 'Teacher',
+    0x1e: 'Toji',
+}
 
 
 def convertChar(b1, b2, table):
@@ -16,12 +35,12 @@ def convertChar(b1, b2, table):
     if char in table:
         charenc = table[char][0]
         if charenc == "":
-            return "UNK(" + char + ")"
+            return "UNK(" + char + ")", False
         elif charenc == "!":
-            return ""
+            return "", False
         else:
-            return charenc
-    return "<" + char + ">"
+            return charenc, False
+    return "<" + char + ">", True
 
 
 def checkStringStart(f, table):
@@ -30,9 +49,13 @@ def checkStringStart(f, table):
     b2check2 = f.readByte()
     b1check2 = f.readByte()
     f.seek(-4, 1)
-    charcheck = convertChar(b1check, b2check, table)
-    charcheck2 = convertChar(b1check2, b2check2, table)
-    if charcheck != "" and charcheck2 != "" and charcheck != "_" and charcheck[0] != "<" and charcheck2 != "_" and charcheck2[0] != "<":
+    charcheck, charunk = convertChar(b1check, b2check, table)
+    if charunk and charcheck in allcodes:
+        charunk = False
+    charcheck2, charunk2 = convertChar(b1check2, b2check2, table)
+    if charunk2 and (charcheck2 in allcodes or charcheck == "<ff06>"):
+        charunk2 = False
+    if charcheck != "" and charcheck2 != "" and charcheck != "_" and charcheck2 != "_" and not charunk and not charunk2:
         return True
     return False
 
@@ -42,7 +65,7 @@ def readString(f, table):
     while True:
         b2 = f.readByte()
         b1 = f.readByte()
-        char = convertChar(b1, b2, table)
+        char, _ = convertChar(b1, b2, table)
         if char == "<ffff>":
             break
         elif char == "<ff06>":
@@ -60,6 +83,7 @@ def readString(f, table):
 
 codes = {"<ch:": 0xff06, "<sp:": 0xff08, "<wt:": 0xff0a}
 singlecodes = {"name": 0xff0e}
+allcodes = ["<ff06>", "<ff08>", "<ff0a>", "<ff0e>", "<name>"]
 
 
 def writeString(f, s, table, bigrams, maxlen=0):
@@ -71,28 +95,28 @@ def writeString(f, s, table, bigrams, maxlen=0):
             number = int(s[x+4:].split(">", 1)[0])
             f.writeUShort(codes[s[x:x+4]])
             f.writeUShort(number)
-            x += 5
-            i += 3 + len(str(number))
+            x += 4 + len(str(number))
+            i += 4
         elif c == "<":
             code = s[x+1:].split(">", 1)[0]
             if code in singlecodes:
                 f.writeUShort(singlecodes[code])
             else:
-                f.write(bytes.fromhex(code))
+                f.writeUShort(int(code, 16))
             x += 1 + len(code)
             i += 2
         elif c == "U" and x < len(s) - 4 and s[x:x+4] == "UNK(":
             code = s[x+6] + s[x+7]
-            f.write(bytes.fromhex(code))
+            f.writeByte(int(code, 16))
             code = s[x+4] + s[x+5]
-            f.write(bytes.fromhex(code))
+            f.writeByte(int(code, 16))
             x += 8
             i += 2
         elif c == ">" and s[x+1] == ">":
-            x += 1
-            i += 4
             f.writeUShort(0xff00)
             f.writeUShort(0xff04)
+            x += 1
+            i += 4
             if len(s) == x + 1:
                 # Pad with line breaks
                 while i < maxlen:
@@ -123,7 +147,6 @@ def writeString(f, s, table, bigrams, maxlen=0):
             common.logError("Line too long", str(i) + "/" + str(maxlen), s)
             i = -1
             break
-    f.writeUShort(0xffff)
     return i
 
 

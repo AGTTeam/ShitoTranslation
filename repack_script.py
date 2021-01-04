@@ -68,6 +68,8 @@ def run(data):
                                     newstr = ""
                                 newstr += addend
                                 game.writeString(f, newstr, invtable, bigrams, strend - strpos - 2)
+                                f.seek(strend - 2)
+                                f.writeUShort(0xffff)
                             else:
                                 fin.seek(strpos)
                                 f.write(fin.read(strend - strpos))

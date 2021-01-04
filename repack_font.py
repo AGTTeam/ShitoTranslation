@@ -33,11 +33,15 @@ def run(data):
 
     # Generate the code range
     codes = []
+    skipcodes = []
     with codecs.open(intable, "r", "utf-8") as f:
         table = common.getSection(f, "")
         for c in table:
-            if int(c, 16) < 0x900:
+            charcode = int(c, 16)
+            if charcode < 0x900:
                 continue
+            if charcode == 0x3b40 or charcode == 0x3b80 or charcode == 0xf080:
+                skipcodes.append(len(codes))
             codes.append(c)
 
     # Generate a basic bigrams list
@@ -87,6 +91,10 @@ def run(data):
     x = 0
     tablestr = ""
     for item in items:
+        while x in skipcodes:
+            fontx += 16
+            x += 1
+            fontwidths.append(0)
         if item in chars:
             for i2 in range(15):
                 for j2 in range(15):
@@ -101,6 +109,11 @@ def run(data):
             for i2 in range(7):
                 for j2 in range(15):
                     pixels[fontx + i2 + chars[item[0]] + 1, fonty + j2] = fontpixels[positions[item[1]] + i2, j2]
+            totlen = (chars[item[0]] + 1 + chars[item[1]])
+            if totlen < 15:
+                for i2 in range(15 - totlen):
+                    for j2 in range(15):
+                        pixels[fontx + totlen + i2, fonty + j2] = fontpixels[positions[" "], j2]
             fontwidths.append(chars[item[0]] + chars[item[1]] + 2)
         fontx += 16
         if fontx == 16 * 4:
@@ -118,8 +131,11 @@ def run(data):
     with common.Stream(bankfile, "rb+") as f:
         ws.repackImage(f, outfont, 16 * 4, 16 * 244)
         f.seek(9 * 4 * 64)
-        for fontwidth in fontwidths:
-            f.writeByte(fontwidth)
+        for i in range(len(fontwidths)):
+            if i not in skipcodes:
+                f.writeByte(fontwidths[i])
+            else:
+                f.seek(1, 1)
             f.seek(63, 1)
 
     if x < len(items):

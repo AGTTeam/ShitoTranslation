@@ -3,7 +3,7 @@ import os
 import click
 from hacktools import common, ws
 
-version = "0.7.0"
+version = "0.7.1"
 data = "ShitoData/"
 romfile = data + "shito.ws"
 rompatch = data + "shito_patched.ws"
@@ -63,6 +63,7 @@ def repack(font, script, img, debug, angel, no_rom):
     if all or img:
         import repack_img
         repack_img.run(data)
+    common.copyFile(infolder + "bank_14.bin", outfolder + "bank_14.bin")
     if debug or angel:
         # https://tcrf.net/Neon_Genesis_Evangelion:_Shito_Ikusei
         with common.Stream(outfolder + "bank_14.bin", "rb+") as f:
