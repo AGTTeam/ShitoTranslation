@@ -16,13 +16,17 @@ replacefolder = data + "replace/"
 @common.cli.command()
 @click.option("--rom", is_flag=True, default=False)
 @click.option("--font", is_flag=True, default=False)
+@click.option("--bin", is_flag=True, default=False)
 @click.option("--script", is_flag=True, default=False)
 @click.option("--credits", is_flag=True, default=False)
 @click.option("--img", is_flag=True, default=False)
-def extract(rom, font, script, credits, img):
-    all = not rom and not font and not script and not credits and not img
+def extract(rom, font, bin, script, credits, img):
+    all = not rom and not font and not bin and not script and not credits and not img
     if all or rom:
         ws.extractRom(romfile, infolder, outfolder)
+    if all or bin:
+        import extract_bin
+        extract_bin.run(data)
     if all or font:
         with common.Stream(infolder + "bank_10.bin", "rb") as f:
             ws.extractImage(f, data + "font_output.png", 16 * 4, 16 * 244)
@@ -63,15 +67,19 @@ def repack(font, script, img, debug, angel, no_rom):
     if all or img:
         import repack_img
         repack_img.run(data)
-    common.copyFile(infolder + "bank_14.bin", outfolder + "bank_14.bin")
-    if debug or angel:
-        # https://tcrf.net/Neon_Genesis_Evangelion:_Shito_Ikusei
-        with common.Stream(outfolder + "bank_14.bin", "rb+") as f:
+    # https://tcrf.net/Neon_Genesis_Evangelion:_Shito_Ikusei
+    with common.Stream(outfolder + "bank_14.bin", "rb+") as f:
+        if debug or angel:
             if debug:
                 f.seek(0x97)
                 f.writeUInt(0x4000cc6e)
             f.seek(0xa6b9)
             f.writeByte(0x0e if not angel else 0x0d)
+        else:
+            f.seek(0x97)
+            f.writeUInt(0x0)
+            f.seek(0xa6b9)
+            f.writeByte(0x3)
     if not no_rom:
         if os.path.isdir(replacefolder):
             common.mergeFolder(replacefolder, outfolder)

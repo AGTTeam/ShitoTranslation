@@ -22,6 +22,22 @@ speakercodes = {
     0x1c: 'Teacher',
     0x1e: 'Toji',
 }
+# Ranges of strings in other bank files
+fileranges = {
+    "bank_14.bin": [
+        (0x8536, 0x86a6),
+        (0x94a2, 0x9990),
+        (0xdd74, 0xdd9a),
+        (0xddd8, 0xddf2),
+        (0xdece, 0xdef2),
+        (0xdf30, 0xdf44),
+        (0xdfc0, 0xdfd6),
+        (0xe020, 0xe034),
+    ],
+    "bank_1d.bin": [
+        (0xce70, 0xdad0),
+    ]
+}
 
 
 def convertChar(b1, b2, table):
@@ -60,7 +76,7 @@ def checkStringStart(f, table):
     return False
 
 
-def readString(f, table):
+def readString(f, table, binline=False):
     readingstr = ""
     while True:
         b2 = f.readByte()
@@ -76,14 +92,16 @@ def readString(f, table):
             readingstr += "<wt:" + str(f.readUShort()) + ">"
         elif char == "<ff0e>":
             readingstr += "<name>"
+        elif char == "<ff10>":
+            readingstr += "<item>"
         else:
             readingstr += char
     return readingstr
 
 
 codes = {"<ch:": 0xff06, "<sp:": 0xff08, "<wt:": 0xff0a}
-singlecodes = {"name": 0xff0e}
-allcodes = ["<ff06>", "<ff08>", "<ff0a>", "<ff0e>", "<name>"]
+singlecodes = {"name": 0xff0e, "item": 0xff10}
+allcodes = ["<ff06>", "<ff08>", "<ff0a>", "<ff0e>", "<ff10>"]
 
 
 def writeString(f, s, table, bigrams, maxlen=0):
