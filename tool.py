@@ -52,12 +52,13 @@ def extract(rom, font, bin, script, credits, img):
 @common.cli.command()
 @click.option("--font", is_flag=True, default=False)
 @click.option("--script", is_flag=True, default=False)
+@click.option("--credits", is_flag=True, default=False)
 @click.option("--img", is_flag=True, default=False)
 @click.option("--debug", is_flag=True, default=False)
 @click.option("--angel", is_flag=True, default=False)
 @click.option("--no-rom", is_flag=True, default=False)
-def repack(font, script, img, debug, angel, no_rom):
-    all = not font and not script and not img
+def repack(font, script, img, credits, debug, angel, no_rom):
+    all = not font and not script and not credits and not img
     if all or font:
         import repack_font
         repack_font.run(data)
@@ -67,6 +68,9 @@ def repack(font, script, img, debug, angel, no_rom):
     if all or img:
         import repack_img
         repack_img.run(data)
+    if all or credits:
+        import repack_credits
+        repack_credits.run(data)
     # https://tcrf.net/Neon_Genesis_Evangelion:_Shito_Ikusei
     with common.Stream(outfolder + "bank_14.bin", "rb+") as f:
         if debug or angel:

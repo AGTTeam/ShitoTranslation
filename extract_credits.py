@@ -13,23 +13,12 @@ def run(data):
         common.logMessage("Extracting credits to", outfile, "...")
         with common.Stream(infolder + "bank_09.bin", "rb") as f:
             f.seek(0xf120)
-            readingstr = False
             while f.tell() < 0xf9e2:
-                if readingstr:
-                    b2 = f.readByte()
-                    b1 = f.readByte()
-                    if b2 == 0xff and b1 == 0xff:
-                        out.write("\n<ffff>")
-                        readingstr = False
-                    else:
-                        out.write(game.convertChar(b1, b2, table))
+                b2 = f.readByte()
+                b1 = f.readByte()
+                utfc, _ = game.convertChar(b1, b2, table)
+                if utfc == "<ffff>":
+                    out.write("\n")
                 else:
-                    check = game.checkStringStart(f, table)
-                    if check:
-                        readingstr = True
-                        out.write("\n")
-                    else:
-                        b2 = f.readByte()
-                        b1 = f.readByte()
-                        out.write(game.convertChar(b1, b2, table))
+                    out.write(utfc)
         common.logMessage("Done!")

@@ -9,16 +9,8 @@ def run(data):
     outfolder = data + "repack/"
     files = ["bank_11.bin", "bank_12.bin"]
     infile = data + "script_input.txt"
-    fontconfig = data + "fontconfig.txt"
-    with codecs.open(data + "table_input.txt", "r", "utf-8") as tablef:
-        table = common.getSection(tablef, "")
-    invtable = {}
-    for c in table.keys():
-        invtable[table[c][0]] = c
-    with codecs.open(data + "table.txt", "r", "utf-8") as tablef:
-        bigrams = common.getSection(tablef, "")
     chartot = transtot = 0
-    glyphs = game.readFontGlyphs(fontconfig)
+    table, invtable, bigrams, glyphs = game.getFontData(data)
 
     if not os.path.isfile(infile):
         common.logError("Input file", infile, "not found")

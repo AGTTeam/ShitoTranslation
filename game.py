@@ -40,6 +40,19 @@ fileranges = {
 }
 
 
+def getFontData(data):
+    fontconfig = data + "fontconfig.txt"
+    with codecs.open(data + "table_input.txt", "r", "utf-8") as tablef:
+        table = common.getSection(tablef, "")
+    invtable = {}
+    for c in table.keys():
+        invtable[table[c][0]] = c
+    with codecs.open(data + "table.txt", "r", "utf-8") as tablef:
+        bigrams = common.getSection(tablef, "")
+    glyphs = readFontGlyphs(fontconfig)
+    return table, invtable, bigrams, glyphs
+
+
 def convertChar(b1, b2, table):
     char = ""
     if b1 < 0x10:
