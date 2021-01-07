@@ -12,6 +12,7 @@ def run(data):
     intable = data + "table_output.txt"
     outtable = data + "table.txt"
     eventin = data + "script_input.txt"
+    binin = data + "bin_input.txt"
     bankfile = data + "repack/bank_10.bin"
 
     common.logMessage("Repacking font ...")
@@ -49,6 +50,8 @@ def run(data):
     # And a complete one from all the bigrams
     with codecs.open(eventin, "r", "utf-8") as event:
         inputs = common.getSection(event, "")
+    with codecs.open(binin, "r", "utf-8") as bin:
+        inputs.update(common.getSection(bin, ""))
     for k, input in inputs.items():
         for str in input:
             if str == "":

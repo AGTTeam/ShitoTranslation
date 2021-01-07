@@ -3,7 +3,7 @@ import os
 import click
 from hacktools import common, ws
 
-version = "0.7.1"
+version = "0.7.2"
 data = "ShitoData/"
 romfile = data + "shito.ws"
 rompatch = data + "shito_patched.ws"
@@ -51,17 +51,21 @@ def extract(rom, font, bin, script, credits, img):
 
 @common.cli.command()
 @click.option("--font", is_flag=True, default=False)
+@click.option("--bin", is_flag=True, default=False)
 @click.option("--script", is_flag=True, default=False)
 @click.option("--credits", is_flag=True, default=False)
 @click.option("--img", is_flag=True, default=False)
 @click.option("--debug", is_flag=True, default=False)
 @click.option("--angel", is_flag=True, default=False)
 @click.option("--no-rom", is_flag=True, default=False)
-def repack(font, script, img, credits, debug, angel, no_rom):
-    all = not font and not script and not credits and not img
+def repack(font, bin, script, img, credits, debug, angel, no_rom):
+    all = not font and not bin and not script and not img and not credits
     if all or font:
         import repack_font
         repack_font.run(data)
+    if all or bin:
+        import repack_bin
+        repack_bin.run(data)
     if all or script:
         import repack_script
         repack_script.run(data)
