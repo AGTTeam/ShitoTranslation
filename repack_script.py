@@ -10,7 +10,7 @@ def run(data):
     files = ["bank_11.bin", "bank_12.bin"]
     infile = data + "script_input.txt"
     chartot = transtot = 0
-    table, invtable, bigrams, glyphs = game.getFontData(data)
+    table, invtable, ccodes, glyphs = game.getFontData(data)
 
     if not os.path.isfile(infile):
         common.logError("Input file", infile, "not found")
@@ -59,7 +59,7 @@ def run(data):
                                 if newstr == "!":
                                     newstr = ""
                                 newstr += addend
-                                game.writeString(f, newstr, invtable, bigrams, strend - strpos - 2)
+                                game.writeString(f, newstr, invtable, ccodes, strend - strpos - 2)
                                 f.seek(strend - 2)
                                 f.writeUShort(0xffff)
                             else:

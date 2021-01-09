@@ -5,8 +5,8 @@ block_cipher = None
 
 a = Analysis(['tool.py'],
              pathex=['D:\\roms\\shito'],
-             binaries=[('xdelta.exe', '.')],
-             datas=[],
+             binaries=[('xdelta.exe', '.'), ('nasm.exe', '.')],
+             datas=[('bin_patch.asm', '.')],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
              runtime_hooks=[],

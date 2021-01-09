@@ -27,6 +27,11 @@ fileranges = {
     "bank_14.bin": [
         (0x8536, 0x86a6),
         (0x94a2, 0x9990),
+        (0xa380, 0xa388),
+        (0xa390, 0xa396),
+        (0xa3a0, 0xa3aa),
+        (0xa3b0, 0xa3b6),
+        (0xa3c0, 0xa3c6),
         (0xdd74, 0xdd9a),
         (0xddd8, 0xddf2),
         (0xdece, 0xdef2),
@@ -48,9 +53,9 @@ def getFontData(data):
     for c in table.keys():
         invtable[table[c][0]] = c
     with codecs.open(data + "table.txt", "r", "utf-8") as tablef:
-        bigrams = common.getSection(tablef, "")
+        ccodes = common.getSection(tablef, "")
     glyphs = readFontGlyphs(fontconfig)
-    return table, invtable, bigrams, glyphs
+    return table, invtable, ccodes, glyphs
 
 
 def convertChar(b1, b2, table):
@@ -103,21 +108,27 @@ def readString(f, table, binline=False):
             readingstr += "<sp:" + str(f.readUShort()) + ">"
         elif char == "<ff0a>":
             readingstr += "<wt:" + str(f.readUShort()) + ">"
+        elif char == "<ff0c>":
+            readingstr += "<unk1>"
         elif char == "<ff0e>":
             readingstr += "<name>"
         elif char == "<ff10>":
             readingstr += "<item>"
+        elif char == "<ff12>":
+            readingstr += "<angl>"
+        elif char == "<ff14>":
+            readingstr += "<perc>"
         else:
             readingstr += char
     return readingstr
 
 
 codes = {"<ch:": 0xff06, "<sp:": 0xff08, "<wt:": 0xff0a}
-singlecodes = {"name": 0xff0e, "item": 0xff10}
-allcodes = ["<ff06>", "<ff08>", "<ff0a>", "<ff0e>", "<ff10>"]
+singlecodes = {"unk1": 0xff0c, "name": 0xff0e, "item": 0xff10, "angl": 0xff12, "perc": 0xff14}
+allcodes = ["<ff06>", "<ff08>", "<ff0a>", "<ff0c>", "<ff0e>", "<ff10>", "<ff12>", "<ff14>"]
 
 
-def writeString(f, s, table, bigrams, maxlen=0):
+def writeString(f, s, table, ccodes, maxlen=0):
     s = s.replace("～", "〜")
     x = i = 0
     while x < len(s):
@@ -144,6 +155,9 @@ def writeString(f, s, table, bigrams, maxlen=0):
             x += 8
             i += 2
         elif c == ">" and s[x+1] == ">":
+            if i % 2 == 1:
+                f.writeByte(int(ccodes[" "][0], 16))
+                i += 1
             f.writeUShort(0xff00)
             f.writeUShort(0xff04)
             x += 1
@@ -156,17 +170,12 @@ def writeString(f, s, table, bigrams, maxlen=0):
         elif c == "|":
             i += 2
             f.writeUShort(0xff02)
-        elif ord(c) < 256:
-            if x + 1 == len(s) or ord(s[x+1]) >= 256 or s[x+1] == ">" or s[x+1] == "<" or s[x+1] == "|":
-                bigram = c + " "
-            else:
-                bigram = c + s[x+1]
-                x += 1
-            if bigram not in bigrams:
-                common.logError("Bigram not found:", bigram, "in string", s)
-                bigram = "  "
-            i += 2
-            f.writeUShort(int(bigrams[bigram][0], 16))
+        elif c in ccodes or ord(c) < 256:
+            i += 1
+            if c not in ccodes:
+                common.logError("Character not found:", c, "in string", s)
+                c = " "
+            f.writeByte(int(ccodes[c][0], 16))
         else:
             if c in table:
                 f.writeUShort(int(table[c], 16))
@@ -175,7 +184,7 @@ def writeString(f, s, table, bigrams, maxlen=0):
             i += 2
         x += 1
         if maxlen > 0 and i > maxlen:
-            common.logError("Line too long", str(i) + "/" + str(maxlen), s)
+            common.logError("Line too long", str(i) + "/" + str(len(s) - x) + "/" + str(maxlen), s)
             i = -1
             break
     return i
