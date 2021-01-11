@@ -6,3 +6,5 @@ ShitoData
 *.exe
 *.ttf
 notes.md
+nasm
+.DS_Store
