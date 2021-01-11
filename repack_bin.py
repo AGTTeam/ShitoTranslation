@@ -46,4 +46,4 @@ def run(data, allfile=False):
                                 f.seek(strend)
         common.logMessage("Done! Translation is at {0:.2f}%".format((100 * transtot) / chartot))
 
-    nasm.run("bin_patch.asm")
+    nasm.run(common.bundledFile("bin_patch.asm"))

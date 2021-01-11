@@ -3,7 +3,7 @@ import os
 import click
 from hacktools import common, ws
 
-version = "0.8.0"
+version = "0.9.0"
 data = "ShitoData/"
 romfile = data + "shito.ws"
 rompatch = data + "shito_patched.ws"
@@ -66,7 +66,7 @@ def repack(font, bin, script, img, credits, debug, angel, no_rom):
     if all or bin:
         import repack_bin
         repack_bin.run(data)
-    if all or script:
+    if all or script or bin:
         import repack_script
         repack_script.run(data)
     if all or img:
@@ -106,6 +106,13 @@ def translate(text):
     for c in text:
         ret += invtable[c][-2:] + invtable[c][:2]
     common.logMessage(ret)
+
+
+@common.cli.command()
+@click.option("--p", is_flag=True, default=False)
+def analyze(p):
+    import analyze_script
+    analyze_script.run(data, p)
 
 
 if __name__ == "__main__":

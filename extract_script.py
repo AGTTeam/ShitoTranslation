@@ -43,19 +43,10 @@ def run(data, speaker=True, scene=False, merge=False):
             if merge:
                 mergesection = common.getSection(mergescript, file)
             with common.Stream(infolder + file, "rb") as f:
-                lastpos = 0
                 while f.tell() < size - 1:
-                    b1 = f.readByte()
-                    if b1 == 0x0a and game.checkStringStart(f, table):
+                    opcode = f.readByte()
+                    if opcode == 0x0a:
                         strpos = f.tell()
-                        # Move a couple bugged lines a bit
-                        if file == "bank_11.bin" and strpos == 0x850:
-                            strpos += 16
-                        elif file == "bank_12.bin" and strpos == 0x4dd5:
-                            strpos += 12
-                        # Print the skipped bytes in the debug log
-                        f.seek(lastpos)
-                        common.logDebug("Skipped from", common.toHex(lastpos), "to", common.toHex(strpos), ":", f.read(strpos - lastpos).hex())
                         # Print the scene name
                         if scene:
                             if (nextscene is not None and strpos >= nextscene['pos']):
@@ -97,6 +88,10 @@ def run(data, speaker=True, scene=False, merge=False):
                                     del mergesection[readstr]
                             out.write("\n")
                             common.logDebug("Read string:", readstr)
-                            lastpos = f.tell()
+                    elif opcode in game.repopcodes:
+                        while f.readByte() != 0xff:
+                            pass
+                    else:
+                        f.seek(game.opcodes[opcode], 1)
             out.write("\n\n")
         common.logMessage("Done! Extracted", len(files), "files")
