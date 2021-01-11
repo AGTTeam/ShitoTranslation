@@ -16,7 +16,6 @@ def run(data):
         for file in files:
             section = common.getSection(imagef, file)
             if len(section) > 0:
-                common.copyFile(infolder + file, outfolder + file)
                 with common.Stream(outfolder + file, "rb+") as f:
                     for imgname in section.keys():
                         imgdata = section[imgname][0].split(",")
