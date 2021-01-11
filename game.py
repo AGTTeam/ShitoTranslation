@@ -26,6 +26,7 @@ speakercodes = {
 fileranges = {
     "bank_14.bin": [
         (0x8536, 0x86a6),
+        (0xb715, 0xb909, 2),
         (0x94a2, 0x9990),
         (0xa380, 0xa388),
         (0xa390, 0xa396),

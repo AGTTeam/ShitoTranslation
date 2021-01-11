@@ -19,6 +19,8 @@ def run(data, allfile=False):
                 for range in game.fileranges[file]:
                     f.seek(range[0])
                     while f.tell() < range[1]:
+                        if (len(range) >= 3):
+                            f.seek(range[2], 1)
                         pos = f.tell()
                         binstr = game.readString(f, table, True)
                         if allfile and len(binstr) > 50:
