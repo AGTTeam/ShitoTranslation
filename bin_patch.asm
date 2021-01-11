@@ -3,8 +3,8 @@
     .org 0x82cf
     jmp 0xf759
     nop
-    ; Custom code to check if a character is control code or ascii
-    ; If < 0xff20, assume this ia control code
+    ; Custom code to check if a character is a control code or ascii
+    ; If < 0xff20, assume this is a control code
     .org 0xf759
     cmp si,0xff20
     jge ascii
@@ -17,7 +17,7 @@
     .org 0x82db
     call 0xf790
 
-    ; Other calls to the drawing function
+    ; Replace other calls to the drawing function
     .org 0x8438
     inc di
     inc di
@@ -36,15 +36,53 @@
     call 0xf770
     nop
     nop
-    .org 0x86b2
-    inc di
-    inc di
-    call 0xf770
-    nop
-    nop
 
-    ; BIN string calls
+    ; Replace hardcoded BIN string calls
+    .org 0x2d3f
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0x55a8
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xa371
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xae1f
+    inc di
+    inc di
+    call 0xf7b0
     .org 0xbc2e
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xbc4d
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xbc67
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xe3a6
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xe3c5
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xe3df
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xe40b
+    inc di
+    inc di
+    call 0xf7b0
+    .org 0xe799
     inc di
     inc di
     call 0xf7b0
@@ -70,7 +108,7 @@
     call 0xf800
     test cx,cx
     je return
-    ; Decrease script by 1
+    ; Decrease script counter by 1
     dec word ds:[bx+0x0022]
     return:
     pop cx
