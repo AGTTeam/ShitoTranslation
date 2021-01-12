@@ -30,6 +30,9 @@ def run(data, processed):
                     pos = f.tell()
                     opcode = f.readByte()
                     if opcode in game.opcodes and game.opcodes[opcode] != -1:
+                        addline = ""
+                        if opcode in game.ptropcodes:
+                            addline = " Pointer: " + repr(game.ptropcodes[opcode])
                         if opcode == 0x0a:
                             if processed:
                                 common.logDebug("Failing at", common.toHex(pos))
@@ -43,14 +46,15 @@ def run(data, processed):
                                 readbytes += byte
                                 if byte == "FF ":
                                     break
-                            writeLine(out, pos, opcode, readbytes)
+                            writeLine(out, pos, opcode, readbytes + addline)
                         else:
-                            writeLine(out, pos, opcode, f.readBytes(game.opcodes[opcode]))
+                            writeLine(out, pos, opcode, f.readBytes(game.opcodes[opcode]) + addline)
                             if opcode == 0xff:
                                 out.write("\n")
                                 check = f.readUInt()
-                                f.seek(-4, 1)
-                                if check == 0xffffffff:
+                                check2 = f.readUInt()
+                                f.seek(-8, 1)
+                                if check == 0xffffffff and check2 == 0xffffffff:
                                     break
                     else:
                         common.logError("Uknown opcode", common.toHex(opcode), "at", common.toHex(pos))

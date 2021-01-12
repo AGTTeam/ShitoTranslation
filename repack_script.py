@@ -93,8 +93,9 @@ def run(data):
                             f.write(fin.read(game.opcodes[opcode]))
                             if opcode == 0xff:
                                 check = fin.readUInt()
-                                fin.seek(-4, 1)
-                                if check == 0xffffffff:
+                                check2 = fin.readUInt()
+                                fin.seek(-8, 1)
+                                if check == 0xffffffff and check2 == 0xffffffff:
                                     break
                     # Pad with 0xffff
                     f.writeBytes(0xff, 0xffff - f.tell() + 1)
