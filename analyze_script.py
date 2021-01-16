@@ -41,10 +41,12 @@ def run(data, processed):
                                 writeLine(out, pos, opcode, game.readString(f, table))
                         elif opcode in game.repopcodes:
                             readbytes = ""
+                            replen = 0
                             while True:
                                 byte = f.readBytes(1)
                                 readbytes += byte
-                                if byte == "FF ":
+                                replen += 1
+                                if byte == "FF " and (opcode not in game.ptropcodes or replen > 2):
                                     break
                             writeLine(out, pos, opcode, readbytes + addline)
                         else:

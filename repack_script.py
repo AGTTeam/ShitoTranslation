@@ -81,10 +81,12 @@ def run(data):
                             if opcode in game.ptropcodes:
                                 pointers[file].append(f.tell())
                             f.writeByte(opcode)
+                            replen = 0
                             while True:
                                 loopbyte = fin.readByte()
                                 f.writeByte(loopbyte)
-                                if loopbyte == 0xff:
+                                replen += 1
+                                if loopbyte == 0xff and (opcode not in game.ptropcodes or replen > 2):
                                     break
                         else:
                             if opcode in game.ptropcodes:
