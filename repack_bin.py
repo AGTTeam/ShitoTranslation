@@ -21,11 +21,11 @@ def run(data, allfile=False):
             common.logMessage("Processing", file, "...")
             common.copyFile(infolder + file, outfolder + file)
             with common.Stream(outfolder + file, "rb+") as f:
-                for range in game.fileranges[file]:
-                    f.seek(range[0])
-                    while f.tell() < range[1]:
-                        if (len(range) >= 3):
-                            f.seek(range[2], 1)
+                for binrange in game.fileranges[file]:
+                    f.seek(binrange[0])
+                    while f.tell() < binrange[1]:
+                        if (len(binrange) >= 3):
+                            f.seek(binrange[2], 1)
                         strpos = f.tell()
                         readstr = game.readString(f, table, True)
                         if allfile and len(readstr) > 50:
@@ -45,7 +45,10 @@ def run(data, allfile=False):
                                 common.logDebug("Repacking", newstr, "at", common.toHex(strpos))
                                 f.seek(strpos)
                                 game.writeString(f, newstr, invtable, ccodes, strend - strpos - 2)
-                                f.seek(strend)
+                                while f.tell() < strend:
+                                    f.writeByte(int(ccodes[" "][0], 16))
+                                f.seek(strend - 2)
+                                f.writeUShort(0xffff)
         common.logMessage("Done! Translation is at {0:.2f}%".format((100 * transtot) / chartot))
 
     nasm.run(common.bundledFile("bin_patch.asm"))
