@@ -175,6 +175,7 @@ ptropcodes = {
 # A list of hardcoded script pointers found in the binary file
 # Format: (offset, ptr value, bank value)
 # Mostly "mov word ptr ds:0x1697, value" opcodes
+# and "mov ax, value / mov word ptr ds:0x149f, ax"
 binptrs = [
     (0x2da3+1, 0x788f, 0xf2),
     (0x2dc1+1, 0x788f, 0xf2),

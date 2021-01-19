@@ -136,18 +136,13 @@ def run(data):
             game.binptrs.append((pos1, ptr1, bank1))
             game.binptrs.append((pos2, ptr2, bank2))
             f.seek(8, 1)
-        f.seek(0x2ff7)
-        while f.tell() < 0x3027:
-            pos = f.tell()
-            ptr = f.readUShort()
-            bank = f.readUShort()
-            game.binptrs.append((pos, ptr, bank))
-        f.seek(0x3063)
-        while f.tell() < 0x309b:
-            pos = f.tell()
-            ptr = f.readUShort()
-            bank = f.readUShort()
-            game.binptrs.append((pos, ptr, bank))
+        for binrange in [(0x2ff7, 0x3027), (0x3063, 0x309b), (0x480f, 0x481f), (0x496b, 0x499b), (0x4a01, 0x4a39)]:
+            f.seek(binrange[0])
+            while f.tell() < binrange[1]:
+                pos = f.tell()
+                ptr = f.readUShort()
+                bank = f.readUShort()
+                game.binptrs.append((pos, ptr, bank))
         f.seek(0x902e)
         while f.tell() < 0x9106:
             pos = f.tell()
