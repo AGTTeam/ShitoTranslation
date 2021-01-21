@@ -310,7 +310,7 @@ singlecodes = {"unk1": 0xff0c, "name": 0xff0e, "item": 0xff10, "angl": 0xff12, "
 allcodes = ["<ff06>", "<ff08>", "<ff0a>", "<ff0c>", "<ff0e>", "<ff10>", "<ff12>", "<ff14>"]
 
 
-def writeString(f, s, table, ccodes, maxlen=0):
+def writeString(f, s, table, ccodes, maxlen=0, usebigrams=False):
     s = s.replace("～", "〜")
     x = i = 0
     while x < len(s):
@@ -337,18 +337,10 @@ def writeString(f, s, table, ccodes, maxlen=0):
             x += 8
             i += 2
         elif c == ">" and s[x+1] == ">":
-            # if i % 2 == 1:
-            #    f.writeByte(int(ccodes[" "][0], 16))
-            #    i += 1
             f.writeUShort(0xff00)
             f.writeUShort(0xff04)
             x += 1
             i += 4
-            # if len(s) == x + 1:
-            # Pad with line breaks
-            #     while i < maxlen:
-            #        i += 2
-            #        f.writeUShort(0xff04)
         elif c == "|":
             i += 2
             f.writeUShort(0xff02)
@@ -357,7 +349,11 @@ def writeString(f, s, table, ccodes, maxlen=0):
             if c not in ccodes:
                 common.logError("Character not found:", c, "in string", s)
                 c = " "
-            f.writeByte(int(ccodes[c][0], 16))
+            if x < len(s) - 1 and c + s[x+1] in ccodes:
+                f.writeByte(int(ccodes[c + s[x+1]][0], 16))
+                x += 1
+            else:
+                f.writeByte(int(ccodes[c][0], 16))
         else:
             if c in table:
                 f.writeUShort(int(table[c], 16))
@@ -387,6 +383,6 @@ def readFontGlyphs(file):
     with codecs.open(file, "r", "utf-8") as f:
         fontconfig = common.getSection(f, "")
         for c in fontconfig:
-            charlen = int(fontconfig[c][0])
+            charlen = 0 if fontconfig[c][0] == "" else int(fontconfig[c][0])
             glyphs[c] = common.FontGlyph(0, charlen, charlen + 1)
     return glyphs

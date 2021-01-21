@@ -16,10 +16,15 @@ def run(data):
     # List of characters and positions in the font.png file
     chars = {}
     positions = {}
+    bigrams = []
     with codecs.open(fontconfigfile, "r", "utf-8") as f:
         fontconfig = common.getSection(f, "")
         x = 0
         for c in fontconfig:
+            if fontconfig[c][0] == "":
+                bigrams.append(c)
+                chars[c] = chars[c[0]] + 1 + chars[c[1]]
+                continue
             chars[c] = int(fontconfig[c][0])
             positions[c] = x
             if chars[c] > 7:
@@ -49,13 +54,21 @@ def run(data):
                 fonty += 16
             x += 1
             fontwidths.append(0)
-        for i2 in range(15 if chars[item] > 7 else 7):
-            for j2 in range(15):
-                pixels[fontx + i2, fonty + j2] = fontpixels[positions[item] + i2, j2]
-        if chars[item] <= 7:
-            for i2 in range(8):
+        if item in bigrams:
+            for i2 in range(7):
                 for j2 in range(15):
-                    pixels[fontx + 7 + i2, fonty + j2] = fontpixels[positions[" "], j2]
+                    pixels[fontx + i2, fonty + j2] = fontpixels[positions[item[0]] + i2, j2]
+            for i2 in range(7):
+                for j2 in range(15):
+                    pixels[fontx + chars[item[0]] + 1 + i2, fonty + j2] = fontpixels[positions[item[1]] + i2, j2]
+        else:
+            for i2 in range(15 if chars[item] > 7 else 7):
+                for j2 in range(15):
+                    pixels[fontx + i2, fonty + j2] = fontpixels[positions[item] + i2, j2]
+        if chars[item] < 15:
+            for i2 in range(15 - chars[item]):
+                for j2 in range(15):
+                    pixels[fontx + chars[item] + i2, fonty + j2] = fontpixels[positions[" "], j2]
         fontwidths.append(chars[item] + 1)
         fontx += 16
         if fontx == 16 * 4:

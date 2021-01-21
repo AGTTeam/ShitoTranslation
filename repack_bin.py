@@ -44,7 +44,7 @@ def run(data, allfile=False):
                             if newstr != "":
                                 common.logDebug("Repacking", newstr, "at", common.toHex(strpos))
                                 f.seek(strpos)
-                                game.writeString(f, newstr, invtable, ccodes, strend - strpos - 2)
+                                game.writeString(f, newstr, invtable, ccodes, strend - strpos - 2, True)
                                 while f.tell() < strend:
                                     f.writeByte(int(ccodes[" "][0], 16))
                                 f.seek(strend - 2)
