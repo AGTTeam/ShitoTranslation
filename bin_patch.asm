@@ -13,6 +13,12 @@
     ascii:
     jmp 0x82db
 
+    ; Tweak start x position for lines
+    .org 0x83cc
+    mov word ss:0x41c,0x0
+    .org 0x83de
+    mov word ss:0x41c,0x0
+
     ; Jump to custom code from the character drawing function
     .org 0x82db
     call 0xf790
