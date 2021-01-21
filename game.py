@@ -3,6 +3,7 @@ from hacktools import common
 
 # The value in pixels that we can fit before wordwrapping
 wordwrap = 206
+wordwrap_angel = 136
 # Speaker codes
 speakercodes = {
     0x00: 'Shigeru',
