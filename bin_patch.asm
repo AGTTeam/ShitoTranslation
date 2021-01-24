@@ -191,6 +191,10 @@
 
     ; Space out the name rendering characters
     .org 0xf880
+    add word ss:[0x300],0x2
+    push word ss:[0x300]
     call 0x17e2
+    pop word ss:[0x300]
+    add word ss:[0x300],0xb
     ret
 .close

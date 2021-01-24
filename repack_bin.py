@@ -89,7 +89,7 @@ def run(data, allfile=False):
     # Set the name input selection glyphs in bank 14
     newglyphs = {}
     with codecs.open(infilename, "r", "utf-8") as name:
-        nameglyphs = name.read().replace("\r", "").replace("\n", "")
+        nameglyphs = name.read().replace("\r", "").replace("\n", "").replace("#", "")
     with common.Stream(outfolder + "bank_14.bin", "rb+") as f:
         # Write the new name input values
         f.seek(0xc250)
