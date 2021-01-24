@@ -7,6 +7,7 @@ def run(data, allfile=False):
     infolder = data + "extract/"
     outfolder = data + "repack/"
     infile = data + "bin_input.txt"
+    infilename = data + "name_input.txt"
     chartot = transtot = 0
     table, invtable, ccodes, glyphs = game.getFontData(data)
 
@@ -85,6 +86,31 @@ def run(data, allfile=False):
                     f.seek(0xcd00)
                     for newptr in newptrs:
                         f.writeUShort(newptr)
-        common.logMessage("Done! Translation is at {0:.2f}%".format((100 * transtot) / chartot))
+    # Set the name input selection glyphs in bank 14
+    newglyphs = {}
+    with codecs.open(infilename, "r", "utf-8") as name:
+        nameglyphs = name.read().replace("\r", "").replace("\n", "")
+    with common.Stream(outfolder + "bank_14.bin", "rb+") as f:
+        # Write the new name input values
+        f.seek(0xc250)
+        for nameglyph in nameglyphs:
+            if nameglyph in invtable and invtable[nameglyph][:2] != 'ff':
+                f.writeUShort(int(invtable[nameglyph], 16))
+            else:
+                glyphcode = int(ccodes[nameglyph][0], 16) - 0x20
+                glyphcode <<= 6
+                glyphcode += 0xa300
+                newglyphs[nameglyph] = glyphcode
+                f.writeUShort(glyphcode)
+        # Write "Adam", but using the long glyphs
+        f.seek(0x296c + 3)
+        f.writeUShort(int(invtable["Ａ"], 16))
+        f.seek(3, 1)
+        f.writeUShort(newglyphs["d"])
+        f.seek(3, 1)
+        f.writeUShort(newglyphs["a"])
+        f.seek(3, 1)
+        f.writeUShort(newglyphs["m"])
+    common.logMessage("Done! Translation is at {0:.2f}%".format((100 * transtot) / chartot))
 
     nasm.run(common.bundledFile("bin_patch.asm"))

@@ -42,7 +42,7 @@ def run(data):
 
     # Generate the image and table
     fontx = 0
-    fonty = 0xc0 * 16 + 1
+    fonty = 0xa3 * 16 + 1
     fontwidths = []
     x = 0x20
     tablestr = ""
@@ -80,12 +80,33 @@ def run(data):
             break
     with codecs.open(outtable, "w", "utf-8") as f:
         f.write(tablestr)
+    # Replace the original ASCII character as well
+    fontx = 0
+    fonty = 1
+    asciiglyphs = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    asciiwidths = []
+    for asciiglyph in asciiglyphs:
+        for i2 in range(7):
+            for j2 in range(15):
+                pixels[fontx + i2, fonty + j2] = fontpixels[positions[asciiglyph] + i2, j2]
+        for i2 in range(15 - chars[asciiglyph]):
+            for j2 in range(15):
+                pixels[fontx + chars[asciiglyph] + i2, fonty + j2] = fontpixels[positions[" "], j2]
+        asciiwidths.append(chars[asciiglyph] + 1)
+        fontx += 16
+        if fontx == 16 * 4:
+            fontx = 0
+            fonty += 16
     img.save(outfont, "PNG")
 
     # Put the font back in the bank and set the font widths
     with common.Stream(bankfile, "rb+") as f:
         ws.repackImage(f, outfont, 16 * 4, 16 * 244)
-        f.seek((0xc0 * 4) * 64)
+        f.seek(0)
+        for i in range(len(asciiwidths)):
+            f.writeByte(asciiwidths[i])
+            f.seek(63, 1)
+        f.seek((0xa3 * 4) * 64)
         for i in range(len(fontwidths)):
             if 0x20 + i not in skipcodes:
                 f.writeByte(fontwidths[i])
