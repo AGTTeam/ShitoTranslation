@@ -44,6 +44,8 @@ def run(data, allfile=False):
                                         del section[readstr]
                                 strend = f.tell()
                                 if newstr != "":
+                                    if newstr == "!":
+                                        newstr = ""
                                     common.logDebug("Repacking", newstr, "at", common.toHex(strpos))
                                     f.seek(strpos)
                                     game.writeString(f, newstr, invtable, ccodes, strend - strpos - 2, True)
