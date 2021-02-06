@@ -29,7 +29,7 @@ def extract(rom, font, bin, script, credits, img):
         extract_bin.run(data)
     if all or font:
         with common.Stream(infolder + "bank_10.bin", "rb") as f:
-            ws.extractImage(f, data + "font_output.png", 16 * 4, 16 * 244)
+            ws.extractTiledImage(f, data + "font_output.png", 16 * 4, 16 * 244)
         with common.Stream(data + "table_output.txt", "w") as f:
             columns = ("00", "40", "80", "c0")
             for row in range(244):

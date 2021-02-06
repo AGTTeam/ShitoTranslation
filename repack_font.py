@@ -101,7 +101,7 @@ def run(data):
 
     # Put the font back in the bank and set the font widths
     with common.Stream(bankfile, "rb+") as f:
-        ws.repackImage(f, outfont, 16 * 4, 16 * 244)
+        ws.repackTiledImage(f, outfont, 16 * 4, 16 * 244)
         f.seek(0)
         for i in range(len(asciiwidths)):
             f.writeByte(asciiwidths[i])
