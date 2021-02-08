@@ -59,6 +59,11 @@
     inc di
     inc di
     call 0xf7b0
+    .org 0x5582
+    inc di
+    inc di
+    call 0xf7b0
+    pop cx
     .org 0x55a8
     inc di
     inc di
