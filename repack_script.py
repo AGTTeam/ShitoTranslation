@@ -61,8 +61,7 @@ def run(data):
                                         del section[readstr]
                             strend = fin.tell()
                             if newstr != "":
-                                if newstr.count("|") == 0:
-                                    newstr = common.wordwrap(newstr, glyphs, game.wordwrap, game.detectTextCode)
+                                newstr = common.wordwrap(newstr, glyphs, game.wordwrap, game.detectTextCode)
                                 if newstr == "!":
                                     newstr = ""
                                 newstr += addend
