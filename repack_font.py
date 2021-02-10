@@ -22,6 +22,9 @@ def run(data):
         x = 0
         for c in fontconfig:
             if fontconfig[c][0] == "":
+                if c in bigrams:
+                    common.logError("Duplicate bigram", c)
+                    continue
                 bigrams.append(c)
                 chars[c] = chars[c[0]] + 1 + chars[c[1]]
                 continue
