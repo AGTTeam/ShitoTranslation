@@ -74,11 +74,11 @@
         },
         "hacktools": {
             "hashes": [
-                "sha256:d6455e3283ef414fa0a09577d714c180f7be2470ef9fb6fa685049853b0cdd57",
-                "sha256:f8eb822627a4804d0885e582a66a6c25bc363fbe47d6aac94e6b9726eb083009"
+                "sha256:275b37a50f44e26e022d6b60d9e48b8ba5506b2549fc0dc36f424dbf50c1c9ae",
+                "sha256:767f5f2f73d4bfea51dabf76284d86b74801d118ca4a38cd494e955410b9438e"
             ],
             "index": "pypi",
-            "version": "==0.16.0"
+            "version": "==0.16.1"
         },
         "ndspy": {
             "hashes": [
@@ -164,10 +164,10 @@
         },
         "tqdm": {
             "hashes": [
-                "sha256:4621f6823bab46a9cc33d48105753ccbea671b68bab2c50a9f0be23d4065cb5a",
-                "sha256:fe3d08dd00a526850568d542ff9de9bbc2a09a791da3c334f3213d8d0bbbca65"
+                "sha256:11d544652edbdfc9cc41aa4c8a5c166513e279f3f2d9f1a9e1c89935b51de6ff",
+                "sha256:a89be573bfddb81bb0b395a416d5e55e3ecc73ce95a368a4f6360bedea33195e"
             ],
-            "version": "==4.56.0"
+            "version": "==4.56.2"
         }
     },
     "develop": {

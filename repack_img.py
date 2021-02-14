@@ -1,4 +1,5 @@
 import codecs
+import game
 from hacktools import common, ws
 
 
@@ -26,4 +27,8 @@ def run(data):
                         tilestart = int(imgdata[0], 16)
                         ws.repackMappedImage(f, workfolder + imgname + ".png", tilestart, mapstart, imgnum, readpal, writepal)
                         repacked += imgnum
+            if file == "bank_09.bin":
+                map = game.getBerserkMap(outfolder)
+                ws.repackMappedTiles(f, 0xf080, map, ws.bwpalette)
+                repacked += 1
     common.logMessage("Done! Repacked", repacked, "files")

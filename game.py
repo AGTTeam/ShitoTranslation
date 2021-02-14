@@ -1,5 +1,5 @@
 import codecs
-from hacktools import common
+from hacktools import common, ws
 
 # The value in pixels that we can fit before wordwrapping
 wordwrap = 206
@@ -398,3 +398,18 @@ def readFontGlyphs(file):
             charlen = 0 if fontconfig[c][0] == "" else int(fontconfig[c][0])
             glyphs[c] = common.FontGlyph(0, charlen, charlen + 1)
     return glyphs
+
+
+def getBerserkMap(outfolder):
+    map = ws.TileMap()
+    map.name = outfolder + "bank_09_03.png"
+    map.width = 4
+    map.height = 4
+    map.bpp = 2
+    map.map = [
+        ws.TileData(0), ws.TileData(1), ws.TileData(2), ws.TileData(0, hflip=True),
+        ws.TileData(3), ws.TileData(4), ws.TileData(5), ws.TileData(3, hflip=True),
+        ws.TileData(3), ws.TileData(6), ws.TileData(7), ws.TileData(3, hflip=True),
+        ws.TileData(3), ws.TileData(8), ws.TileData(9), ws.TileData(3, hflip=True),
+    ]
+    return map

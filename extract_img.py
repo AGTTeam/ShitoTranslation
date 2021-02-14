@@ -1,4 +1,5 @@
 import codecs
+import game
 from hacktools import common, ws
 
 
@@ -30,4 +31,8 @@ def run(data):
                     else:
                         tilestart = int(imgdata[0], 16)
                         ws.extractMappedImage(f, outfolder + imgname + ".png", tilestart, mapstart, imgnum, readpal)
+                if file == "bank_09.bin":
+                    map = game.getBerserkMap(outfolder)
+                    ws.writeMappedImage(f, 0xf080, [map], ws.bwpalette)
+                    extracted += 1
     common.logMessage("Done! Extracted", extracted, "files")
