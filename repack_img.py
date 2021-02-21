@@ -13,7 +13,7 @@ def run(data):
     files = common.getFiles(infolder)
 
     repacked = 0
-    with codecs.open(data + "images.txt", "r", "utf-8") as imagef:
+    with codecs.open(common.bundledFile("images.txt"), "r", "utf-8") as imagef:
         for file in files:
             section = common.getSection(imagef, file)
             if len(section) > 0:
@@ -27,8 +27,15 @@ def run(data):
                         tilestart = int(imgdata[0], 16)
                         ws.repackMappedImage(f, workfolder + imgname + ".png", tilestart, mapstart, imgnum, readpal, writepal)
                         repacked += imgnum
-            if file == "bank_09.bin":
-                map = game.getBerserkMap(outfolder)
-                ws.repackMappedTiles(f, 0xf080, map, ws.bwpalette)
-                repacked += 1
+                    if file == "bank_09.bin":
+                        map = game.getBerserkMap(workfolder)
+                        ws.repackMappedTiles(f, 0xf080, map, ws.bwpalette)
+                        repacked += 1
+    # Repack ramen stand images
+    with common.Stream(outfolder + "bank_03.bin", "rb+") as f:
+        map = game.getRamenMap(workfolder)
+        ws.repackMappedTiles(f, 0x3748, map, ws.bwpalette)
+        map = game.getLanternMap(workfolder)
+        ws.repackMappedTiles(f, 0x3748, map, ws.bwpalette)
+        repacked += 2
     common.logMessage("Done! Repacked", repacked, "files")

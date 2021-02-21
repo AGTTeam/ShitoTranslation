@@ -1,1 +1,1 @@
-pipenv run pyinstaller --clean --icon=icon.ico --add-binary "xdelta.exe;." --add-binary "nasm.exe;." --add-data "bin_patch.asm;." --exclude-module="numpy" --distpath . -F --hidden-import="pkg_resources.py2_warn" tool.py
+pipenv run pyinstaller --clean --icon=icon.ico --add-binary "xdelta.exe;." --add-binary "nasm.exe;." --add-data "bin_patch.asm;." --add-data "images.txt;." --exclude-module="numpy" --distpath . -F --hidden-import="pkg_resources.py2_warn" tool.py

@@ -13,7 +13,7 @@ def run(data):
     files = common.getFiles(infolder)
 
     extracted = 0
-    with codecs.open(data + "images.txt", "r", "utf-8") as imagef:
+    with codecs.open(common.bundledFile("images.txt"), "r", "utf-8") as imagef:
         for file in files:
             section = common.getSection(imagef, file)
             with common.Stream(infolder + file, "rb") as f:
@@ -35,4 +35,10 @@ def run(data):
                     map = game.getBerserkMap(outfolder)
                     ws.writeMappedImage(f, 0xf080, [map], ws.bwpalette)
                     extracted += 1
+    # Extract ramen stand image
+    with common.Stream(infolder + "bank_03.bin", "rb") as f:
+        map = game.getRamenMap(outfolder)
+        ws.writeMappedImage(f, 0x3748, [map], ws.bwpalette)
+        map = game.getLanternMap(outfolder)
+        ws.writeMappedImage(f, 0x3748, [map], ws.bwpalette)
     common.logMessage("Done! Extracted", extracted, "files")

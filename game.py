@@ -413,3 +413,32 @@ def getBerserkMap(outfolder):
         ws.TileData(3), ws.TileData(8), ws.TileData(9), ws.TileData(3, hflip=True),
     ]
     return map
+
+
+def getRamenMap(outfolder):
+    map = ws.TileMap()
+    map.name = outfolder + "bank_03_01.png"
+    map.width = 18
+    map.height = 2
+    map.bpp = 2
+    map.map = [
+        ws.TileData(38), ws.TileData(39), ws.TileData(40), ws.TileData(41), ws.TileData(42), ws.TileData(43), ws.TileData(40), ws.TileData(40, hflip=True), ws.TileData(40), ws.TileData(40, hflip=True),
+        ws.TileData(44), ws.TileData(45), ws.TileData(40), ws.TileData(46), ws.TileData(47), ws.TileData(17), ws.TileData(18), ws.TileData(19),
+        ws.TileData(52), ws.TileData(53), ws.TileData(54), ws.TileData(55), ws.TileData(56), ws.TileData(57), ws.TileData(58), ws.TileData(59), ws.TileData(60), ws.TileData(61),
+        ws.TileData(62), ws.TileData(63), ws.TileData(64), ws.TileData(65), ws.TileData(66), ws.TileData(52), ws.TileData(53), ws.TileData(54),
+    ]
+    return map
+
+
+def getLanternMap(outfolder):
+    map = ws.TileMap()
+    map.name = outfolder + "bank_03_02.png"
+    map.width = 2
+    map.height = 3
+    map.bpp = 2
+    map.map = [
+        ws.TileData(27), ws.TileData(28),
+        ws.TileData(48), ws.TileData(49),
+        ws.TileData(67), ws.TileData(68),
+    ]
+    return map
