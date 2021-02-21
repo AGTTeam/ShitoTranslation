@@ -7,7 +7,7 @@ Run `tool extract` to extract everything and `tool repack` to repack after editi
 Run `tool extract --help` or `tool repack --help` for more info.  
 ## Run from source
 Install [Python 3.8](https://www.python.org/downloads/) and pipenv.  
-Download [nasm](https://www.nasm.us/).
+Download [nasm](https://www.nasm.us/).  
 Download xdelta.exe.  
 Run `pipenv install`.  
 Run the tool with `pipenv run tool.py` or build with `pipenv run pyinstaller tool.spec`.  
@@ -43,13 +43,3 @@ The parameters are:
 * Set to 1 to write new palette data, instead of using the original ones
 ### Manual
 Copy the bank you want to edit from the "extract" folder to the "replace" folder (create it if it doesn't exist)  and edit it directly.  
-### Bank list
-These are the banks that contain images with Japanese text:  
-* bank_07: Cutscenes
-* bank_08: Cutscenes
-* bank_09: Cutscenes
-* bank_13: UI panels
-* bank_18: Title, map select
-* bank_19: Ending, name entry, other text
-* bank_1c: Portraits
-* bank_1e: Large text
