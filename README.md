@@ -1,4 +1,5 @@
 # Shito Translation
+This repository is for the tool used to translate the game. If you're looking for the English patch, click [here](http://www.romhacking.net/translations/6024/).  
 ## Setup
 Create a "ShitoData" folder and copy the rom as "shito.ws" in it.   
 ## Run from binary
