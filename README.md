@@ -2,6 +2,7 @@
 This repository is for the tool used to translate the game. If you're looking for the English patch, click [here](http://www.romhacking.net/translations/6024/).  
 ## Setup
 Create a "ShitoData" folder and copy the rom as "shito.ws" in it.   
+Download [this](https://gist.github.com/Illidanz/539f84ffd6e7dcbc0126dacad99b616b) file as "table_input.txt" in the ShitoData folder.  
 ## Run from binary
 Download the latest [release](https://github.com/Illidanz/ShitoTranslation/releases) outside the ShitoData folder.  
 Run `tool extract` to extract everything and `tool repack` to repack after editing.  
