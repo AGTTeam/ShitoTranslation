@@ -11,7 +11,7 @@ Run `tool extract --help` or `tool repack --help` for more info.
 Install [Python 3.8](https://www.python.org/downloads/) and pipenv.  
 Download [nasm](https://www.nasm.us/).  
 Download xdelta.exe.  
-Run `pipenv install`.  
+Run `pipenv sync`.  
 Run the tool with `pipenv run tool.py` or build with `pipenv run pyinstaller tool.spec`.  
 ## Font Editing
 Edit `font.png`. Normal glyphs should be 7 pixels long, aligned to the left. Large glyphs should be 15 pixels long.  
