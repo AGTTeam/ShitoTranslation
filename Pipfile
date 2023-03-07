@@ -7,7 +7,7 @@ verify_ssl = true
 pyinstaller = "*"
 
 [packages]
-hacktools = "*"
+hacktools = {extras = ["graphics", "ips", "xdelta"], version = "*"}
 
 [requires]
-python_version = "3.8"
+python_version = "3"

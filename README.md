@@ -8,9 +8,8 @@ Download the latest [release](https://github.com/Illidanz/ShitoTranslation/relea
 Run `tool extract` to extract everything and `tool repack` to repack after editing.  
 Run `tool extract --help` or `tool repack --help` for more info.  
 ## Run from source
-Install [Python 3.8](https://www.python.org/downloads/) and pipenv.  
+Install [Python 3](https://www.python.org/downloads/) and pipenv.  
 Download [nasm](https://www.nasm.us/).  
-Download xdelta.exe.  
 Run `pipenv sync`.  
 Run the tool with `pipenv run tool.py` or build with `pipenv run pyinstaller tool.spec`.  
 ## Font Editing
@@ -44,4 +43,4 @@ The parameters are:
 * Set to 1 to read the palette for image export
 * Set to 1 to write new palette data, instead of using the original ones
 ### Manual
-Copy the bank you want to edit from the "extract" folder to the "replace" folder (create it if it doesn't exist)  and edit it directly.  
+Copy the bank you want to edit from the "extract" folder to the "replace" folder (create it if it doesn't exist) and edit it directly.  
