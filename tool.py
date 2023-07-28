@@ -3,7 +3,7 @@ import os
 import click
 from hacktools import common, ws
 
-version = "1.2.2"
+version = "1.3.0"
 data = "ShitoData/"
 romfile = "shito.ws"
 rompatch = data + "shito_patched.ws"
