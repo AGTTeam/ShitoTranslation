@@ -1,17 +1,11 @@
 # Shito Translation
 This repository is for the tool used to translate the game. If you're looking for the English patch, click [here](http://www.romhacking.net/translations/6024/).  
 ## Setup
-Create a "ShitoData" folder and copy the rom as "shito.ws" in it.   
-Download [this](https://gist.github.com/Illidanz/539f84ffd6e7dcbc0126dacad99b616b) file as "table_input.txt" in the ShitoData folder.  
-## Run from binary
-Download the latest [release](https://github.com/Illidanz/ShitoTranslation/releases) outside the ShitoData folder.  
-Run `tool extract` to extract everything and `tool repack` to repack after editing.  
-Run `tool extract --help` or `tool repack --help` for more info.  
-## Run from source
-Install [Python 3](https://www.python.org/downloads/) and pipenv.  
-Download [nasm](https://www.nasm.us/).  
-Run `pipenv sync`.  
-Run the tool with `pipenv run tool.py` or build with `pipenv run pyinstaller tool.spec`.  
+Install [Python 3](https://www.python.org/downloads/).  
+Download this repository by downloading and extracting it, or cloning it.  
+Copy the original Japanese rom into the same folder and rename it as `shito.ws`.  
+Run `run_windows.bat` (for Windows) or `run_bash` (for OSX/Linux) to run the tool.  
+Download [this](https://gist.github.com/Illidanz/539f84ffd6e7dcbc0126dacad99b616b) file as `table_input.txt` in the ShitoData folder.  
 ## Font Editing
 Edit `font.png`. Normal glyphs should be 7 pixels long, aligned to the left. Large glyphs should be 15 pixels long.  
 The glyphs should be in the same order as the `fontconfig.txt` file, where you should also specify the glyph size.  
@@ -44,3 +38,8 @@ The parameters are:
 * Set to 1 to write new palette data, instead of using the original ones
 ### Manual
 Copy the bank you want to edit from the "extract" folder to the "replace" folder (create it if it doesn't exist) and edit it directly.  
+## Run from command line
+This is not recommended if you're not familiar with Python and the command line.  
+After following the Setup section, run `pipenv sync` to install dependencies.  
+Run `pipenv run python tool.py extract` to extract everything, and `pipenv run python tool.py repack` to repack.  
+You can use switches like `pipenv run python tool.py repack --bin` to only repack certain parts to speed up the process.  

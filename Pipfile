@@ -4,10 +4,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pyinstaller = "*"
 
 [packages]
-hacktools = {extras = ["graphics", "ips", "xdelta"], version = "*"}
+hacktools = {extras = ["cli", "graphics", "ips", "xdelta"], version = "*"}
 
 [requires]
 python_version = "3"

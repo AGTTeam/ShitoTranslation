@@ -5,7 +5,7 @@ from hacktools import common, ws
 
 version = "1.2.2"
 data = "ShitoData/"
-romfile = data + "shito.ws"
+romfile = "shito.ws"
 rompatch = data + "shito_patched.ws"
 patchfile = data + "patch.xdelta"
 infolder = data + "extract/"
@@ -56,8 +56,8 @@ def extract(rom, font, bin, script, credits, img):
 @click.option("--credits", is_flag=True, default=False)
 @click.option("--img", is_flag=True, default=False)
 @click.option("--debug", is_flag=True, default=False)
-@click.option("--angel", is_flag=True, default=False)
-@click.option("--no-rom", is_flag=True, default=False)
+@click.option("--angel", is_flag=True, default=False, hidden=True)
+@click.option("--no-rom", is_flag=True, default=False, hidden=True)
 def repack(font, bin, script, img, credits, debug, angel, no_rom):
     all = not font and not bin and not script and not img and not credits
     if all or font:
@@ -94,7 +94,7 @@ def repack(font, bin, script, img, credits, debug, angel, no_rom):
         ws.repackRom(romfile, rompatch, outfolder, patchfile)
 
 
-@common.cli.command()
+@common.cli.command(hidden=True)
 @click.argument("text")
 def translate(text):
     with codecs.open(data + "table_input.txt", "r", "utf-8") as tablef:
@@ -108,7 +108,7 @@ def translate(text):
     common.logMessage(ret)
 
 
-@common.cli.command()
+@common.cli.command(hidden=True)
 @click.option("--p", is_flag=True, default=False)
 def analyze(p):
     import analyze_script
@@ -116,8 +116,4 @@ def analyze(p):
 
 
 if __name__ == "__main__":
-    click.echo("ShitoTranslation version " + version)
-    if not os.path.isdir(data):
-        common.logError(data, "folder not found.")
-        quit()
-    common.cli()
+    common.setupTool("ShitoTranslation", version, data, romfile, 0xbf8d9212)
