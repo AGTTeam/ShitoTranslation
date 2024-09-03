@@ -1,5 +1,5 @@
 # Shito Translation
-This repository is for the tool used to translate the game. If you're looking for the English patch, click [here](http://www.romhacking.net/translations/6024/).  
+This repository is for the tool used to translate the game. If you're looking for the English patch, click [here](https://agtteam.net/shito).  
 ## Setup
 Install [Python 3](https://www.python.org/downloads/).  
 Download this repository by downloading and extracting it, or cloning it.  
