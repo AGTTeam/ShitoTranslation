@@ -46,7 +46,7 @@ def run(data, processed):
                                 byte = f.readBytes(1)
                                 readbytes += byte
                                 replen += 1
-                                if byte == "FF " and (opcode not in game.ptropcodes or replen > 2):
+                                if byte == "ff " and (opcode not in game.ptropcodes or replen > 2):
                                     break
                             writeLine(out, pos, opcode, readbytes + addline)
                         else:

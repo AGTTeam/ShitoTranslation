@@ -68,6 +68,12 @@ def run(data):
                                 common.logDebug("Writing string at", common.toHex(strpos), common.toHex(strpos2), newstr)
                                 game.writeString(f, newstr, invtable, ccodes)
                                 f.writeUShort(0xffff)
+                                # Add some opcodes after a particular line in the script, to fix a missing flag for an event
+                                if readstr == "「オレも葛城も|ガキだったな・・・」":
+                                    f.writeByte(0x7e)
+                                    f.writeByte(0x0e)
+                                    f.writeByte(0x07)
+                                    f.writeByte(0xff)
                                 strend2 = f.tell()
                                 lendiff = (strend2 - strpos2) - (strend - strpos)
                                 if lendiff != 0:
